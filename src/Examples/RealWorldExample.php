@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * Complete Usage Examples for Migration Hooks
- * 
+ *
  * This file demonstrates all the ways to use Migration Hooks in your Laravel application.
  * Copy the methods you need into your AppServiceProvider's boot() method.
  */
@@ -142,7 +142,7 @@ class ComprehensiveExample extends ServiceProvider
         // Update search indices after content changes
         MigrationsHook::afterMigration(function ($data) {
             $searchableTables = ['users', 'posts', 'products'];
-            
+
             foreach ($searchableTables as $table) {
                 if (str_contains($data['file_name'], $table)) {
                     Log::info("Updating search index for {$table}");
@@ -167,12 +167,9 @@ class ComprehensiveExample extends ServiceProvider
 
             // Handle different migration types
             match (true) {
-                str_contains($fileName, 'create_') && str_contains($fileName, '_table') => 
-                    $this->handleTableCreation($data),
-                str_contains($fileName, 'add_index') => 
-                    $this->handleIndexAddition($data),
-                str_contains($fileName, 'drop_') => 
-                    $this->handleTableDrop($data),
+                str_contains($fileName, 'create_') && str_contains($fileName, '_table') => $this->handleTableCreation($data),
+                str_contains($fileName, 'add_index') => $this->handleIndexAddition($data),
+                str_contains($fileName, 'drop_') => $this->handleTableDrop($data),
                 default => null
             };
         });

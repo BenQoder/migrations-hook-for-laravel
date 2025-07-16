@@ -1,14 +1,10 @@
 <?php
 
-use BenQoder\MigrationsHook\Commands\ListMigrationHooksCommand;
-use BenQoder\MigrationsHook\Commands\MakeMigrationHookCommand;
 use BenQoder\MigrationsHook\MigrationsHook;
-use BenQoder\MigrationsHook\MigrationsHookServiceProvider;
 
 /**
  * Tests for commands and execution timing proof
  */
-
 describe('Hook Execution Timing Proof', function () {
     beforeEach(function () {
         MigrationsHook::clearHooks();
@@ -66,14 +62,14 @@ describe('Hook Execution Timing Proof', function () {
 describe('Command Testing', function () {
     it('can generate migration hook files', function () {
         $hooksPath = database_path('hooks');
-        $testFile = $hooksPath . '/test_command_generation.php';
+        $testFile = $hooksPath.'/test_command_generation.php';
 
         // Clean up before test
         @unlink($testFile);
 
         // Mock the console output
         $this->artisan('make:migration-hook', ['migration' => 'test_command_generation'])
-            ->expectsOutput('Migration hook created: ' . $testFile)
+            ->expectsOutput('Migration hook created: '.$testFile)
             ->assertExitCode(0);
 
         // Verify file was created
@@ -93,7 +89,7 @@ describe('Command Testing', function () {
 
     it('can list existing migration hooks', function () {
         $hooksPath = database_path('hooks');
-        
+
         // Create some test hook files
         $testFiles = [
             'create_users_table.php',
@@ -101,7 +97,7 @@ describe('Command Testing', function () {
         ];
 
         foreach ($testFiles as $file) {
-            $filePath = $hooksPath . '/' . $file;
+            $filePath = $hooksPath.'/'.$file;
             file_put_contents($filePath, '<?php return new class { public function beforeUp() {} };');
         }
 
@@ -112,7 +108,7 @@ describe('Command Testing', function () {
 
         // Clean up
         foreach ($testFiles as $file) {
-            @unlink($hooksPath . '/' . $file);
+            @unlink($hooksPath.'/'.$file);
         }
     });
 });

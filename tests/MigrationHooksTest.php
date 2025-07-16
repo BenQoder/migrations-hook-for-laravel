@@ -2,14 +2,11 @@
 
 use BenQoder\MigrationsHook\MigrationsHook;
 use BenQoder\MigrationsHook\MigrationsHookServiceProvider;
-use Illuminate\Database\Events\MigrationStarted;
-use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Database\Migrations\Migration;
 
 /**
  * Comprehensive test suite for Migration Hooks core functionality
  */
-
 describe('Hook Registration and Management', function () {
     beforeEach(function () {
         MigrationsHook::clearHooks();
@@ -126,8 +123,10 @@ describe('Service Provider Integration', function () {
     it('extracts migration file information correctly', function () {
         $provider = new MigrationsHookServiceProvider($this->app);
 
-        $migration = new class extends Migration {
+        $migration = new class extends Migration
+        {
             public function up() {}
+
             public function down() {}
         };
 
@@ -178,11 +177,11 @@ describe('Service Provider Integration', function () {
 describe('File-based Hook Execution', function () {
     it('can find and execute hook files', function () {
         $hooksPath = database_path('hooks');
-        if (!is_dir($hooksPath)) {
+        if (! is_dir($hooksPath)) {
             mkdir($hooksPath, 0755, true);
         }
 
-        $testHookFile = $hooksPath . '/test_file_execution.php';
+        $testHookFile = $hooksPath.'/test_file_execution.php';
 
         $hookContent = <<<'PHP'
 <?php
@@ -231,11 +230,11 @@ PHP;
 
     it('validates hook file structure', function () {
         $hooksPath = database_path('hooks');
-        if (!is_dir($hooksPath)) {
+        if (! is_dir($hooksPath)) {
             mkdir($hooksPath, 0755, true);
         }
 
-        $testHookFile = $hooksPath . '/structure_test.php';
+        $testHookFile = $hooksPath.'/structure_test.php';
 
         $hookContent = <<<'PHP'
 <?php

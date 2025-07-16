@@ -76,7 +76,7 @@ class ListMigrationHooksCommand extends Command
         $this->line('');
         $this->info("Total migrations: {$totalMigrations}");
         $this->info("Migrations with hooks: {$migrationsWithHooks}");
-        
+
         if ($totalMigrations > 0) {
             $this->info('Coverage: '.round(($migrationsWithHooks / $totalMigrations) * 100, 1).'%');
         } else {
