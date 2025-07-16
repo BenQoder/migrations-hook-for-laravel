@@ -18,6 +18,14 @@ class MakeMigrationHookCommand extends Command
         // Remove .php extension if provided
         $migrationName = Str::replaceLast('.php', '', $migrationName);
 
+        // Validate that the migration file exists
+        if (!$this->migrationExists($migrationName)) {
+            $this->error("Migration file not found: {$migrationName}");
+            $this->info('Available migrations:');
+            $this->listAvailableMigrations();
+            return 1;
+        }
+
         $hooksPath = config('migrations-hook-for-laravel.path', database_path('hooks'));
 
         // Create hooks directory if it doesn't exist
@@ -144,5 +152,85 @@ return new class {
     }
 };
 PHP;
+    }
+
+    /**
+     * Check if a migration file exists
+     */
+    protected function migrationExists(string $migrationName): bool
+    {
+        $migrationPaths = $this->getMigrationPaths();
+        
+        foreach ($migrationPaths as $path) {
+            if (!is_dir($path)) {
+                continue;
+            }
+            
+            $files = glob($path . '/*.php');
+            foreach ($files as $file) {
+                $filename = basename($file, '.php');
+                
+                // Only match the full filename (including timestamp)
+                if ($filename === $migrationName) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Get all migration paths
+     */
+    protected function getMigrationPaths(): array
+    {
+        return array_merge(
+            [$this->laravel->databasePath('migrations')],
+            $this->getMigrator()->paths()
+        );
+    }
+
+    /**
+     * Get the migrator instance
+     */
+    protected function getMigrator()
+    {
+        return $this->laravel['migrator'];
+    }
+
+    /**
+     * List all available migrations for user reference
+     */
+    protected function listAvailableMigrations(): void
+    {
+        $migrations = [];
+        $migrationPaths = $this->getMigrationPaths();
+        
+        foreach ($migrationPaths as $path) {
+            if (!is_dir($path)) {
+                continue;
+            }
+            
+            $files = glob($path . '/*.php');
+            foreach ($files as $file) {
+                $filename = basename($file, '.php');
+                $migrations[] = $filename;
+            }
+        }
+
+        if (empty($migrations)) {
+            $this->warn('No migration files found.');
+            return;
+        }
+
+        $this->info('Available migration files:');
+        foreach ($migrations as $migration) {
+            $this->line("  - {$migration}");
+        }
+        
+        $this->info('');
+        $this->info('Usage: php artisan make:migration-hook <full_migration_filename>');
+        $this->info('Example: php artisan make:migration-hook 2024_01_15_123456_create_users_table');
     }
 }

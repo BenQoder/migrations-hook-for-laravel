@@ -1,6 +1,7 @@
 <?php
 
 use BenQoder\MigrationsHook\MigrationsHook;
+use Illuminate\Support\Facades\File;
 
 /**
  * Tests for commands and execution timing proof
@@ -62,29 +63,39 @@ describe('Hook Execution Timing Proof', function () {
 describe('Command Testing', function () {
     it('can generate migration hook files', function () {
         $hooksPath = database_path('hooks');
-        $testFile = $hooksPath.'/test_command_generation.php';
+        $migrationName = '2024_01_15_123456_test_command_generation';
+        $testFile = $hooksPath.'/'.$migrationName.'.php';
+        $migrationFile = database_path('migrations/'.$migrationName.'.php');
 
         // Clean up before test
         @unlink($testFile);
+        @unlink($migrationFile);
 
-        // Mock the console output
-        $this->artisan('make:migration-hook', ['migration' => 'test_command_generation'])
-            ->expectsOutput('Migration hook created: '.$testFile)
-            ->assertExitCode(0);
+        // Create a mock migration file first
+        File::ensureDirectoryExists(database_path('migrations'));
+        File::put($migrationFile, '<?php return new class {};');
 
-        // Verify file was created
-        expect(file_exists($testFile))->toBeTrue();
+        try {
+            // Mock the console output
+            $this->artisan('make:migration-hook', ['migration' => $migrationName])
+                ->expectsOutput('Migration hook created: '.$testFile)
+                ->assertExitCode(0);
 
-        // Verify file contents
-        $content = file_get_contents($testFile);
-        expect($content)->toContain('return new class');
-        expect($content)->toContain('public function beforeUp()');
-        expect($content)->toContain('public function afterUp()');
-        expect($content)->toContain('public function beforeDown()');
-        expect($content)->toContain('public function afterDown()');
+            // Verify file was created
+            expect(file_exists($testFile))->toBeTrue();
 
-        // Clean up
-        unlink($testFile);
+            // Verify file contents
+            $content = file_get_contents($testFile);
+            expect($content)->toContain('return new class');
+            expect($content)->toContain('public function beforeUp()');
+            expect($content)->toContain('public function afterUp()');
+            expect($content)->toContain('public function beforeDown()');
+            expect($content)->toContain('public function afterDown()');
+        } finally {
+            // Clean up after test
+            @unlink($testFile);
+            @unlink($migrationFile);
+        }
     });
 
     it('can list existing migration hooks', function () {

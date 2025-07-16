@@ -52,10 +52,10 @@ return [
 Create migration-specific hook files that automatically execute when migrations run:
 
 ```bash
-php artisan make:migration-hook create_users_table
+php artisan make:migration-hook 2024_01_15_123456_create_users_table
 ```
 
-This creates a hook file in `database/hooks/create_users_table.php`:
+This creates a hook file in `database/hooks/2024_01_15_123456_create_users_table.php`:
 
 ```php
 <?php
@@ -189,8 +189,10 @@ php artisan migration-hooks:list --missing
 ### Create Hook Files
 
 ```bash
-php artisan make:migration-hook create_users_table
+php artisan make:migration-hook 2024_01_15_123456_create_users_table
 ```
+
+**Note**: You must use the complete migration filename (including the timestamp) to ensure hooks run only for their specific migration.
 
 ## Advanced Usage
 
