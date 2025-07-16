@@ -193,7 +193,7 @@ class MigrationsHookServiceProvider extends PackageServiceProvider
 
         // Handle both Unix (/) and Windows (\) path separators
         $filename = basename(str_replace('\\', '/', $filePath), '.php');
-        
+
         return $filename;
     }
 
