@@ -187,11 +187,14 @@ class MigrationsHookServiceProvider extends PackageServiceProvider
      */
     protected function getMigrationFileName(?string $filePath): ?string
     {
-        if (! $filePath) {
-            return null;
+        if (! $filePath || $filePath === '') {
+            return $filePath; // Return null for null, empty string for empty string
         }
 
-        return basename($filePath, '.php');
+        // Handle both Unix (/) and Windows (\) path separators
+        $filename = basename(str_replace('\\', '/', $filePath), '.php');
+        
+        return $filename;
     }
 
     /**
