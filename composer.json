@@ -1,47 +1,42 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "benqoder/migrations-hook-for-laravel",
+    "description": "This is my package migrations-hook-for-laravel",
     "keywords": [
-        ":vendor_name",
+        "BenQoder",
         "laravel",
-        ":package_slug"
+        "migrations-hook-for-laravel"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/benqoder/migrations-hook-for-laravel",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Adinnu Benedict",
+            "email": "benidixt@gmail.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.3",
         "spatie/laravel-package-tools": "^1.16",
         "illuminate/contracts": "^10.0||^11.0||^12.0"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.1.1||^7.10.0",
-        "larastan/larastan": "^2.9||^3.0",
         "orchestra/testbench": "^10.0.0||^9.0.0||^8.22.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-arch": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "phpstan/extension-installer": "^1.3||^2.0",
-        "phpstan/phpstan-deprecation-rules": "^1.1||^2.0",
-        "phpstan/phpstan-phpunit": "^1.3||^2.0",
-        "spatie/laravel-ray": "^1.35"
+        "pestphp/pest-plugin-laravel": "^3.0"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "BenQoder\\MigrationsHook\\": "src/",
+            "BenQoder\\MigrationsHook\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "BenQoder\\MigrationsHook\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +58,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "BenQoder\\MigrationsHook\\MigrationsHookServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "MigrationsHook": "BenQoder\\MigrationsHook\\Facades\\MigrationsHook"
             }
         }
     },
